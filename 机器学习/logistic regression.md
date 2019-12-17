@@ -22,10 +22,10 @@ loss function:
 $$
 J(w) = \sum_{i=1}^n \frac{(\phi(z_i)-y_i)^2}{2}
 $$
-$y=0,y=1$的概率为：
+$y=0,y=1 $的概率为：
 $$
 p(y=0|W,x) = \phi(z)  \\
-p(y=1|W,x) = 1-\phi(z) 
+p(y=1|W,x) = 1-\phi(z)
 $$
 合并，即：
 $$
