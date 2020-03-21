@@ -14,18 +14,20 @@ $$
 z_i = x_iW+b \text{ , where }W:m^0*m^1 \text{ and } x_i:1*m^0
 $$
 
+一个事情的概率是$p/(1-p)$，其中$p$为事件发生的概率
+
+$$
+z = \log(\frac{p}{1-p})
+$$
+
 sigmoid 函数：
 $$
 \phi(z) = \frac{1}{1+e^{-z}}
 $$
-loss function:
-$$
-J(w) = \sum_{i=1}^n \frac{(\phi(z_i)-y_i)^2}{2}
-$$
 $y=0,y=1 $的概率为：
 $$
-p(y=0|W,x) = \phi(z)  \\
-p(y=1|W,x) = 1-\phi(z)
+p(y=1|W,x) = \phi(z)  \\
+p(y=0|W,x) = 1-\phi(z)
 $$
 合并，即：
 $$

@@ -16,7 +16,7 @@
   
 - XGB是leaf-wise还是layer-wise的？
 
-  采用layer-wise，所以精度上会有影响。
+  采用layer-wise，所以某些情况精度上会有影响。
 
 - 什么时候pre-stopping？
 
@@ -60,11 +60,11 @@ obj(\theta) & = & L(\theta) + \Omega(\theta) \\
 & = & \sum_i^n l(y_i,\hat{y_i}) + \sum_{k=1}^K \Omega (f_k)
 \end{eqnarray}
 $$
-其中$l(y_i,\hat{y_i})​$为`loss function`，n为样本数，K为树的个数。
+其中$l(y_i,\hat{y_i})$为`loss function`，n为样本数，K为树的个数。
 
 ## 损失函数
 
-对于第 t 棵树的预测值，用$\hat{y_i}^{(t)}​$表示，那么根据GBTree的定义，第 t 棵树为了拟合第 t-1 棵树的残差：
+对于第 t 棵树的预测值，用$\hat{y_i}^{(t)}$表示，那么根据GBTree的定义，第 t 棵树为了拟合第 t-1 棵树的残差：
 $$
 \begin{eqnarray}
 \hat{y_i}^{(0)} &=& 0 \\
@@ -81,18 +81,18 @@ obj^{(t)} & = & \sum_i^n l(y_i,\hat{y_i}^{(t)}) + \sum_{k=1}^t \Omega (f_k) \\
 & = & \sum_i^n l(y_i,\hat{y_i}^{(t-1)} + f_t(x_i)) + \Omega (f_t) + constant
 \end{eqnarray}
 $$
-之后把残差 $f_t(x_i)$ 看作 $\Delta x​$ 代入二阶泰勒展开近似：
+之后把残差 $f_t(x_i)$ 看作 $\Delta x$ 代入二阶泰勒展开近似：
 $$
 f(x+\Delta x) \approx \frac{f(x)}{0!} + \frac{f'(x)}{1!} \Delta x + \frac{f''(x)}{2!} {\Delta x}^2
 \\
 obj^{(t)} = \sum_i^n [ l(y_i,\hat{y_i}^{(t-1)}) + g_i f_t(x_i) + \frac{1}{2}h_i f_t^2(x_i) ] + \Omega (f_t) + constant
 $$
-其中$g_i$和$h_i​$定义如下：
+其中$g_i$和$h_i$定义如下：
 $$
 g_i = \frac{\partial l(y_i,\hat{y_i}^{(t-1)})}{\partial \hat{y_i}^{(t-1)}} \\
 h_i = \frac{\partial ^ 2 l(y_i,\hat{y_i}^{(t-1)})}{\partial \hat{y_i}^{(t-1)}} \\
 $$
-最小化目标函数，可以去除constant（包括$l(y_i,\hat{y_i}^{(t-1)})​$）。
+最小化目标函数，可以去除constant（包括$l(y_i,\hat{y_i}^{(t-1)})$）。
 
 ## 正则化
 
@@ -117,7 +117,7 @@ G_j = \sum_{i \in I_j} g_i \\
 H_j = \sum_{i \in I_j} h_i \\
 其中，\sum_{i=1}^n x_i = \sum_{j=1}^T \sum_{i \in I_j} x_i
 $$
-此时我们已知关于叶子权重 $ w $ 的目标函数，并希望最小化目标函数，此时我们假设各个叶子的权重$w_j​$之间互不相关（最理想情况），那么相当于一元二次等式求最小值。求得取最小值时的权重：
+此时我们已知关于叶子权重 $ w $ 的目标函数，并希望最小化目标函数，此时我们假设各个叶子的权重$w_j$之间互不相关（最理想情况），那么相当于一元二次等式求最小值。求得取最小值时的权重：
 $$
 w_j^* = - \frac{G_j}{H_j + \lambda}
 $$
@@ -154,7 +154,7 @@ for each tree ft(x):
 
 sort操作：对于k层中的每一层，要最多$O(n \log n)$排序，有d个特征，那么排序操作就是$ O(n d k \log n)$，可以通过`近似方法`（如直方图算法）或者`cache`来加速。
 
-linear search操作：对于k层中的每一层，一共d个特征，每个特征要顺序遍历n个样本，时间复杂度$O(kdn )​$。
+linear search操作：对于k层中的每一层，一共d个特征，每个特征要顺序遍历n个样本，时间复杂度$O(kdn )$。
 
 一共m棵树，那么时间复杂度$O(mndk \log n)$
 
@@ -170,7 +170,7 @@ AllReduce：要用到通信的主要是最优分裂点，XGB采用子节点反�
 - GOSS对较小的梯度采样来减少计算。
 - EFB将稀疏数据绑定得更稠密，减少数据维度。
 - 另通过表记录数据中的非零部分来忽略零值的计算，空间换时间。
-- 对于类别特征，过滤低频特征值。对每个特征值，计算其中的$\frac{一阶梯度和}{二阶梯度和}+cat\_smooth$，然后按照这个排序。分别从大到小、从小到大遍历最多`max_num_cat=32`的长度，找最优划分点（这里还是用的原始的叶子划分标准）。
+- 对于类别特征，过滤低频特征值。对每个特征值，计算其中的$\frac{一阶梯度和}{二阶梯度和+cat\_smooth}$，然后按照这个排序。分别从大到小、从小到大遍历最多`max_num_cat=32`的长度，找最优划分点（这里还是用的原始的叶子划分标准）。
 
 ### Histogram-based Algorithm
 
