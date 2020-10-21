@@ -33,7 +33,9 @@ mask语料中15%的token，因此输入一个句子，预测每句句子中大�
 
 **self-attention：**
 
+![image-20200326181016007](bert.assets/image-20200326181016007.png)
 
+![image-20200326181027049](bert.assets/image-20200326181027049.png)
 
 **position encoding:**
 
